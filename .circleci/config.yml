@@ -26,16 +26,19 @@ defaults: &defaults
     GO111MODULE: "on"
     GO15VENDOREXPERIMENT: 1
 
+restore: &restore-cache
+  - restore-cache:
+      keys:
+        - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
+        - v2-modules-{{ .Branch }}-
+        - v2-modules-
+
 jobs:
-  build:
+  tools:
     <<: *defaults
     steps:
       - checkout
-      - restore-cache:
-          keys:
-            - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
-            - v2-modules-{{ .Branch }}-
-            - v2-modules-
+      <<: *restore-cache
       - run:
           name: install golang
           command: |
@@ -84,6 +87,11 @@ jobs:
             curl -sSLo kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64
             chmod +x kind
             sudo mv kind /usr/local/bin/
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      <<: *restore-cache
       - run:
           name: start kind
           command: |
@@ -193,3 +201,12 @@ jobs:
           command: |
             export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
             make test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - tools
+      - build:
+          requires:
+            - tools
