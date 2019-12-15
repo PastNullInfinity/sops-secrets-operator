@@ -43,16 +43,6 @@ jobs:
             go get -u golang.org/x/lint/golint
             go version
             go env
-      #- run:
-      #    name: install bats
-      #    command: |
-      #      sudo add-apt-repository ppa:duggan/bats
-      #      sudo apt-get update
-      #      sudo apt-get install bats -y
-      - run:
-          name: install gpg2
-          command: |
-            sudo apt-get install gnupg2 -y
       - run:
           name: install kubectl
           command: |
@@ -79,10 +69,22 @@ jobs:
             curl -sSLo kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64
             chmod +x kind
             sudo mv kind /usr/local/bin/
+      #- run:
+      #    name: install bats
+      #    command: |
+      #      sudo add-apt-repository ppa:duggan/bats
+      #      sudo apt-get update
+      #      sudo apt-get install bats -y
+      - run:
+          name: install gpg2
+          command: |
+            sudo apt-get update
+            sudo apt-get install gnupg2 -y
       - save_cache:
           key: v2-bins-{{ .Branch }}
           paths:
             - "/usr/local"
+            - "${HOME}/.kube"
   build:
     executor: ubuntu-vm
     steps:
