@@ -1,48 +1,36 @@
 # based on https://github.com/gavinzhou/ci-minikube
 # https://github.com/kubernetes/minikube#linux-continuous-integration-without-vm-support
-version: 2
+version: 2.1
 
-defaults: &defaults
-  working_directory: /home/circleci/gogo/src/github.com/isindir/sops-secrets-operator
-  machine:
-    image: ubuntu-1604:201903-01
-  environment:
-    K8S_VERSION: v1.16.3
-    KIND_VERSION: v0.6.1
-    HELM_VERSION: v2.16.1
-    GOLANG_VERSION: 1.13.4
-    OPERATOR_SDK_VERSION: v0.13.0
-    SOPS_VERSION: v3.5.0
+executors:
+  ubuntu-vm:
+    working_directory: /home/circleci/gogo/src/github.com/isindir/sops-secrets-operator
+    machine:
+      image: ubuntu-1604:201903-01
+    environment:
+      K8S_VERSION: v1.16.3
+      KIND_VERSION: v0.6.1
+      HELM_VERSION: v2.16.1
+      GOLANG_VERSION: 1.13.4
+      OPERATOR_SDK_VERSION: v0.13.0
+      SOPS_VERSION: v3.5.0
 
-    KUBECONFIG: /home/circleci/.kube/config
+      KUBECONFIG: /home/circleci/.kube/config
 
-    MINIKUBE_WANTUPDATENOTIFICATION: false
-    MINIKUBE_WANTREPORTERRORPROMPT: false
-    MINIKUBE_HOME: /home/circleci
-    CHANGE_MINIKUBE_NONE_USER: true
+      MINIKUBE_WANTUPDATENOTIFICATION: false
+      MINIKUBE_WANTREPORTERRORPROMPT: false
+      MINIKUBE_HOME: /home/circleci
+      CHANGE_MINIKUBE_NONE_USER: true
 
-    GOPATH: /home/circleci/gogo
-    GOROOT: /usr/local/go
-    GO111MODULE: "on"
-    GO15VENDOREXPERIMENT: 1
-
-#restore: &restore-cache
-#  - restore-cache:
-#      keys:
-#        - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
-#        - v2-modules-{{ .Branch }}-
-#        - v2-modules-
+      GOPATH: /home/circleci/gogo
+      GOROOT: /usr/local/go
+      GO111MODULE: "on"
+      GO15VENDOREXPERIMENT: 1
 
 jobs:
   tools:
-    <<: *defaults
+    executor: ubuntu-vm
     steps:
-      - checkout
-      - restore-cache:
-          keys:
-            - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
-            - v2-modules-{{ .Branch }}-
-            - v2-modules-
       - run:
           name: install golang
           command: |
@@ -92,10 +80,10 @@ jobs:
             chmod +x kind
             sudo mv kind /usr/local/bin/
   build:
-    <<: *defaults
+    executor: ubuntu-vm
     steps:
       - checkout
-      - restore-cache:
+      - restore_cache:
           keys:
             - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
             - v2-modules-{{ .Branch }}-
@@ -211,7 +199,7 @@ jobs:
             make test
 
 workflows:
-  version: 2
+  version: 2.1
   build_and_test:
     jobs:
       - tools
