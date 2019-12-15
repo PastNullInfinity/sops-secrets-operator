@@ -43,12 +43,12 @@ jobs:
             go get -u golang.org/x/lint/golint
             go version
             go env
-      - run:
-          name: install bats
-          command: |
-            sudo add-apt-repository ppa:duggan/bats
-            sudo apt-get update
-            sudo apt-get install bats -y
+      #- run:
+      #    name: install bats
+      #    command: |
+      #      sudo add-apt-repository ppa:duggan/bats
+      #      sudo apt-get update
+      #      sudo apt-get install bats -y
       - run:
           name: install gpg2
           command: |
@@ -79,10 +79,18 @@ jobs:
             curl -sSLo kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64
             chmod +x kind
             sudo mv kind /usr/local/bin/
+      - save_cache:
+          key: v2-bins-{{ .Branch }}
+          paths:
+            - "/usr/local"
   build:
     executor: ubuntu-vm
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v2-bins-{{ .Branch }}
+            - v2-bins-
       - restore_cache:
           keys:
             - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
