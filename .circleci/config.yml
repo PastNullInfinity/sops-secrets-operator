@@ -26,19 +26,23 @@ defaults: &defaults
     GO111MODULE: "on"
     GO15VENDOREXPERIMENT: 1
 
-restore: &restore-cache
-  - restore-cache:
-      keys:
-        - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
-        - v2-modules-{{ .Branch }}-
-        - v2-modules-
+#restore: &restore-cache
+#  - restore-cache:
+#      keys:
+#        - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
+#        - v2-modules-{{ .Branch }}-
+#        - v2-modules-
 
 jobs:
   tools:
     <<: *defaults
     steps:
       - checkout
-      <<: *restore-cache
+      - restore-cache:
+          keys:
+            - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
+            - v2-modules-{{ .Branch }}-
+            - v2-modules-
       - run:
           name: install golang
           command: |
@@ -91,7 +95,11 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      <<: *restore-cache
+      - restore-cache:
+          keys:
+            - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
+            - v2-modules-{{ .Branch }}-
+            - v2-modules-
       - run:
           name: start kind
           command: |
