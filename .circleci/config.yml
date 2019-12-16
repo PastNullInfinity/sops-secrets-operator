@@ -31,8 +31,8 @@ executors:
       GO15VENDOREXPERIMENT: 1
 
   ubuntu-vm:
-    working_directory: /home/circleci
-    #working_directory: /home/circleci/gogo/src/github.com/isindir/sops-secrets-operator
+    #working_directory: /home/circleci
+    working_directory: /home/circleci/gogo/src/github.com/isindir/sops-secrets-operator
     machine:
       image: ubuntu-1604:201903-01
     environment:
@@ -197,6 +197,10 @@ jobs:
           name: start kind
           command: |
             export PATH=${USERBIN}:${GOROOT}/bin:${GOPATH}/bin:${PATH}
+            echo "PWD: $( pwd ) ; HOME: ${HOME}"
+            ls -lart $( pwd )
+            echo
+            ls -lart ${HOME}
             kind version
       #- run:
       #    name: start kind
