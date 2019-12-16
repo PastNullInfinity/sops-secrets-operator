@@ -77,7 +77,6 @@ jobs:
             rm -fr ${GOROOT}
             curl -sSLO https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz
             tar -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
-            mv go /home/circleci/
             rm -fr go${GOLANG_VERSION}.linux-amd64.tar.gz
             mkdir -p ${GOPATH}/{src/github.com/isindir,bin,pkg}
             export PATH=${GOROOT}/bin:${GOPATH}/bin:${PATH}
