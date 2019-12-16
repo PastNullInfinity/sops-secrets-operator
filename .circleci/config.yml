@@ -60,10 +60,12 @@ jobs:
     steps:
       - run:
           name: create directories
-          command:
+          command: |
             mkdir -p $USERBIN
             mkdir -p ${HOME}/.kube
             touch ${USERLOCAL}/../.kube/config
+            apt-get update
+            apt-get install build-essential curl file git ruby-full locales --no-install-recommends -y
       - run:
           name: install golang
           command: |
