@@ -119,10 +119,11 @@ jobs:
       #      sudo apt-get update
       #      sudo apt-get install gnupg2 -y
       - save_cache:
-          key: v5-bins-{{ .Branch }}
+          key: v6-bins-{{ .Branch }}
           paths:
             - "${USERLOCAL}"
             - "${USERLOCAL}/../.kube"
+            - "${USERLOCAL}/../go"
   #tools:
   #  executor: ubuntu-vm
   #  steps:
@@ -186,8 +187,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v5-bins-{{ .Branch }}
-            - v5-bins-
+            - v6-bins-{{ .Branch }}
+            - v6-bins-
       - restore_cache:
           keys:
             - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
