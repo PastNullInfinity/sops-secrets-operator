@@ -63,14 +63,14 @@ jobs:
           command:
             mkdir -p $USERBIN
             mkdir -p ${HOME}/.kube
-            touch ${HOME}/.kube/config
+            touch ${USERLOCAL}/../.kube/config
       - run:
           name: install golang
           command:
-            sudo rm -fr ${GOROOT}
+            rm -fr ${GOROOT}
             curl -sSLO https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz
             tar -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
-            sudo mv go /home/circleci/
+            mv go /home/circleci/
             rm -fr go${GOLANG_VERSION}.linux-amd64.tar.gz
             mkdir -p $GOPATH/{src/github.com/isindir,bin,pkg}
             go get -u golang.org/x/lint/golint
@@ -81,25 +81,25 @@ jobs:
           command: |
             curl -sSLo kubectl https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/kubectl
             chmod +x kubectl
-            sudo mv kubectl ${USERBIN}/
+            mv kubectl ${USERBIN}/
       - run:
           name: install sops
           command: |
             curl -sSLo sops https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux
             chmod +x sops
-            sudo mv sops ${USERBIN}/
+            mv sops ${USERBIN}/
       - run:
           name: install operator-sdk
           command: |
             curl -sSLo operator-sdk https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}/operator-sdk-${OPERATOR_SDK_VERSION}-x86_64-linux-gnu
             chmod +x operator-sdk
-            sudo mv operator-sdk ${USERBIN}/
+            mv operator-sdk ${USERBIN}/
       - run:
           name: install kind
           command: |
             curl -sSLo kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64
             chmod +x kind
-            sudo mv kind ${USERBIN}/
+            mv kind ${USERBIN}/
       #- run:
       #    name: install bats
       #    command: |
@@ -114,8 +114,8 @@ jobs:
       - save_cache:
           key: v2-bins-{{ .Branch }}
           paths:
-            - "${HOME}/local"
-            - "${HOME}/.kube"
+            - "${USERLOCAL}/local"
+            - "${USERLOCAL}/../.kube"
   #tools:
   #  executor: ubuntu-vm
   #  steps:
