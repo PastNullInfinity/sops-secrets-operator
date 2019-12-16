@@ -66,7 +66,7 @@ jobs:
             touch ${USERLOCAL}/../.kube/config
             apt-get update
             #apt-get install build-essential curl file git ruby-full locales --no-install-recommends -y
-            apt-get install curl file git --no-install-recommends -y
+            apt-get install build-essential curl file git locales --no-install-recommends -y
       - run:
           name: install golang
           command: |
