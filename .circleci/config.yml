@@ -43,6 +43,8 @@ executors:
       SOPS_VERSION: v3.5.0
 
       KUBECONFIG: /home/circleci/.kube/config
+      USERLOCAL: /home/circleci/local
+      USERBIN: /home/circleci/local/bin
 
       MINIKUBE_WANTUPDATENOTIFICATION: false
       MINIKUBE_WANTREPORTERRORPROMPT: false
@@ -191,6 +193,11 @@ jobs:
             - v2-modules-{{ .Branch }}-{{ checksum "go.sum" }}
             - v2-modules-{{ .Branch }}-
             - v2-modules-
+      - run:
+          name: start kind
+          command: |
+            export PATH=${USERBIN}:${GOROOT}/bin:${GOPATH}/bin:${PATH}
+            kind version
       #- run:
       #    name: start kind
       #    command: |
