@@ -65,7 +65,8 @@ jobs:
             mkdir -p ${USERLOCAL}/../.kube/
             touch ${USERLOCAL}/../.kube/config
             apt-get update
-            apt-get install build-essential curl file git ruby-full locales --no-install-recommends -y
+            #apt-get install build-essential curl file git ruby-full locales --no-install-recommends -y
+            apt-get install curl file git --no-install-recommends -y
       - run:
           name: install golang
           command: |
@@ -74,8 +75,8 @@ jobs:
             tar -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
             mv go /home/circleci/
             rm -fr go${GOLANG_VERSION}.linux-amd64.tar.gz
-            mkdir -p $GOPATH/{src/github.com/isindir,bin,pkg}
-            export PATH=${GOROOT}/bin:${PATH}
+            mkdir -p ${GOPATH}/{src/github.com/isindir,bin,pkg}
+            export PATH=${GOROOT}/bin:${GOPATH}/bin:${PATH}
             go get -u golang.org/x/lint/golint
             go version
             go env
