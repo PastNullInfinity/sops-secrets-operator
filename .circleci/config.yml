@@ -75,6 +75,7 @@ jobs:
             mv go /home/circleci/
             rm -fr go${GOLANG_VERSION}.linux-amd64.tar.gz
             mkdir -p $GOPATH/{src/github.com/isindir,bin,pkg}
+            export PATH=${GOROOT}/bin:${PATH}
             go get -u golang.org/x/lint/golint
             go version
             go env
