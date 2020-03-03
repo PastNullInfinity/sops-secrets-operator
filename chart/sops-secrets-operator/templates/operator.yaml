@@ -28,7 +28,7 @@ spec:
       {{- if .Values.gpg.enabled }}
       initContainers:
         - name: init-myservice
-          image: registry.access.redhat.com/ubi8/ubi-minimal:latest
+          image: coolbeevip/ubi8-ubi-minimal:latest
           command: ['/bin/bash', '-c', 'cp -Lr /var/secrets/gpg-secrets/* /var/secrets/gpg/']
           volumeMounts:
           - mountPath: /var/secrets/gpg
